@@ -77,6 +77,24 @@ python -m src.api.espn
 
 - `requests>=2.31.0` - HTTP requests to ESPN APIs
 - `pandas>=2.0.0` - Data manipulation and CSV export
+- `jupyter>=1.0.0` - Jupyter notebook support
+- `notebook>=6.0.0` - Classic Jupyter Notebook interface
+- `jupyterlab>=3.0.0` - Modern JupyterLab interface
+- `pylint>=2.17.0` - Code quality checks
+
+## Code Quality
+
+Run pylint checks:
+```bash
+./lint.sh
+# or
+pylint src/
+```
+
+Fix trailing whitespace issues:
+```bash
+sed -i '' 's/[[:space:]]*$//' filename.py
+```
 
 ## Notes
 

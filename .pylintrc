@@ -1,0 +1,57 @@
+[MASTER]
+# Python code to execute, usually for sys.path manipulation such as
+# pygtk.require().
+init-hook='import sys; sys.path.append(".")'
+
+# Add files or directories to the blacklist. They should be base names, not
+# paths.
+ignore=CVS,.git,__pycache__,.ipynb_checkpoints
+
+# Add paths to sys.path
+extension-pkg-whitelist=
+
+[MESSAGES CONTROL]
+# Disable specific pylint messages
+disable=
+    missing-module-docstring,
+    missing-function-docstring,
+    missing-class-docstring,
+    too-few-public-methods,
+    invalid-name,
+    line-too-long
+
+[FORMAT]
+# Maximum number of characters on a single line.
+max-line-length=100
+
+# String used as indentation unit. This is usually "    " (4 spaces) or "\t" (1 tab).
+indent-string='    '
+
+[VARIABLES]
+# Tells whether we should check for unused import in __init__ files.
+init-import=no
+
+[DESIGN]
+# Maximum number of arguments for function / method
+max-args=7
+
+# Maximum number of locals for function / method body
+max-locals=15
+
+# Maximum number of return / yield for function / method body
+max-returns=6
+
+# Maximum number of branch for function / method body
+max-branches=12
+
+# Maximum number of statements in function / method body
+max-statements=50
+
+[IMPORTS]
+# Allow wildcard imports from modules listed below.
+allow-wildcard-with-all=no
+
+[EXCEPTIONS]
+# Exceptions that will emit a warning when being caught. Defaults to
+# "Exception"
+overgeneral-exceptions=builtins.Exception,builtins.BaseException

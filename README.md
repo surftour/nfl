@@ -1,27 +1,92 @@
+# NFL Data Analysis Project
 
-## NFL Data
-
-This will eventually be a set of tools to download, fetch, explore, visualize team and game data for the National Football League (NFL).
-
-
-## Notes
-
-Use "jupyter notebook" to view notebooks.
+A Python project for analyzing NFL data using ESPN APIs and weekly statistics.
 
 
-#### Virtual Environment
+## Setup
 
-Followed much of the steps outlined [here](https://medium.com/marvelous-mlops/the-rightway-to-install-python-on-a-mac-f3146d9d9a32).
+1. Install dependencies:
+```bash
+pip install -r requirements.txt
+```
 
-* pyenv versions # shows was environments are setup
-* pyenv virtualenv 3.12.0 myproject # starts virtual python 3.12 environment
-* pyenv local myproject # starts local version
-* pyenv virtualenv-delete myproject # deletes virtual environment
-* pyenv local --unset # this is like deactivate the evironment
+2. For Jupyter notebook support:
+```bash
+jupyter notebook
+# or
+jupyter lab
+```
 
+## Code Quality
 
-Other resources:
-pyenv [docs](https://github.com/pyenv)<br>
-pyenv-virtualenv [docs](https://github.com/pyenv/pyenv-virtualenv)
+This project uses pylint for code quality checks:
 
+```bash
+# Run pylint checks
+./lint.sh
 
+# Or run manually
+pylint src/
+```
+
+The pylint configuration (`.pylintrc`) is customized for practical Python development with reasonable complexity limits and disabled overly strict style checks.
+
+## Available Functions
+
+### ESPN API Functions (`src/api/espn.py`)
+- `fetch_teams()` - Fetches all NFL team information
+- `fetch_team_stats(year, team_id)` - Fetches team statistics
+- `fetch_game_results(year, week, season_type)` - Fetches game results
+
+### Weekly Data Reader (`src/data/weekly_reader.py`)
+- `read_weekly_file(year, week, file_type)` - Reads specific weekly CSV files
+- `read_all_weeks(year, file_type)` - Combines all weekly files for a year
+- Automatically handles column name concatenation and data type inference
+- Separates league totals/averages from team data
+
+### Utility Functions (`src/utils/data_io.py`)
+- `save_to_csv(fetch_function, filename, *args, **kwargs)` - Generic CSV export
+
+## Usage Examples
+
+```python
+from src.api.espn import fetch_teams, fetch_team_stats
+from src.data.weekly_reader import read_weekly_file, read_all_weeks
+from src.utils.data_io import save_to_csv
+
+# Fetch and save team data
+teams_df = save_to_csv(fetch_teams, 'data/nfl_teams.csv')
+
+# Read weekly defensive stats
+def_data = read_weekly_file(2020, 15, 'def')
+
+# Read all defensive data for 2020 season
+all_def_data = read_all_weeks(2020, 'def')
+```
+
+## Dependencies
+
+- `requests>=2.31.0` - HTTP requests to ESPN APIs
+- `pandas>=2.0.0` - Data manipulation and CSV export
+- `jupyter>=1.0.0` - Jupyter notebook support
+- `notebook>=6.0.0` - Classic Jupyter Notebook interface
+- `jupyterlab>=3.0.0` - Modern JupyterLab interface
+- `pylint>=2.17.0` - Code quality checks
+
+## Data Format
+
+Weekly CSV files are expected in the format:
+```
+data/YYYY/weekNN/filename.csv
+```
+
+The reader automatically:
+- Concatenates first two rows as column names
+- Removes spaces and replaces special characters in column names
+- Infers data types (integers vs floats vs strings)
+- Adds year/week columns based on file path
+- Separates league totals from team data
+
+## Development
+
+For detailed development instructions and function documentation, see `CLAUDE.md`.
