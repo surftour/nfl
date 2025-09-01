@@ -11,7 +11,7 @@ Use "jupyter notebook" to view notebooks.
 
 #### Virtual Environment
 
-Followed much of the steps outlined (here)[https://medium.com/marvelous-mlops/the-rightway-to-install-python-on-a-mac-f3146d9d9a32].
+Followed much of the steps outlined [here](https://medium.com/marvelous-mlops/the-rightway-to-install-python-on-a-mac-f3146d9d9a32).
 
 * pyenv versions # shows was environments are setup
 * pyenv virtualenv 3.12.0 myproject # starts virtual python 3.12 environment
@@ -21,7 +21,7 @@ Followed much of the steps outlined (here)[https://medium.com/marvelous-mlops/th
 
 
 Other resources:
-pyenv (docs)[https://github.com/pyenv]
-pyenv-virtualenv (docs)[https://github.com/pyenv/pyenv-virtualenv]
+pyenv [docs](https://github.com/pyenv)<br>
+pyenv-virtualenv [docs](https://github.com/pyenv/pyenv-virtualenv)
 
 
