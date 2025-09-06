@@ -44,6 +44,11 @@ The pylint configuration (`.pylintrc`) is customized for practical Python develo
 - Automatically handles column name concatenation and data type inference
 - Separates league totals/averages from team data
 
+### Weekly Results Reader (`src/data/weekly_results_reader.py`)
+- `read_weekly_game_results(file_path)` - Reads TSV files containing weekly game results
+- Returns DataFrame with columns: date, visiting_team, visiting_score, home_team, home_score, status
+- Parses game data where each row represents a single NFL game
+
 ### Utility Functions (`src/utils/data_io.py`)
 - `save_to_csv(fetch_function, filename, *args, **kwargs)` - Generic CSV export
 
@@ -52,6 +57,7 @@ The pylint configuration (`.pylintrc`) is customized for practical Python develo
 ```python
 from src.api.espn import fetch_teams, fetch_team_stats
 from src.data.weekly_reader import read_weekly_file, read_all_weeks
+from src.data.weekly_results_reader import read_weekly_game_results
 from src.utils.data_io import save_to_csv
 
 # Fetch and save team data
@@ -62,6 +68,9 @@ def_data = read_weekly_file(2020, 15, 'def')
 
 # Read all defensive data for 2020 season
 all_def_data = read_all_weeks(2020, 'def')
+
+# Read weekly game results from TSV file
+games_df = read_weekly_game_results('data/2023/week14/results.tsv')
 ```
 
 ## Dependencies
@@ -78,6 +87,11 @@ all_def_data = read_all_weeks(2020, 'def')
 Weekly CSV files are expected in the format:
 ```
 data/YYYY/weekNN/filename.csv
+```
+
+Weekly game results TSV files are expected in the format:
+```
+data/YYYY/weekNN/results.tsv
 ```
 
 The reader automatically:

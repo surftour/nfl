@@ -3,42 +3,7 @@ from pathlib import Path
 from typing import Optional, List, Tuple
 
 import pandas as pd
-
-
-def _extract_year_week_from_path(file_path: Path) -> Tuple[Optional[int], Optional[int]]:
-    """
-    Extract year and week from file path if it matches the expected format.
-    Expected format: .../data/YYYY/weekNN/filename.csv
-
-    Parameters:
-        file_path (Path): Path to the CSV file
-
-    Returns:
-        Tuple[Optional[int], Optional[int]]: (year, week) if found, (None, None) otherwise
-    """
-    try:
-        path_parts = file_path.parts
-
-        # Look for pattern: data/YYYY/weekNN
-        for i, part in enumerate(path_parts):
-            if part == 'data' and i + 2 < len(path_parts):
-                year_part = path_parts[i + 1]
-                week_part = path_parts[i + 2]
-
-                # Check if year_part is a 4-digit number
-                if re.match(r'^\d{4}$', year_part):
-                    year = int(year_part)
-
-                    # Check if week_part matches weekNN pattern
-                    week_match = re.match(r'^week(\d+)$', week_part)
-                    if week_match:
-                        week = int(week_match.group(1))
-                        return year, week
-
-        return None, None
-
-    except (ValueError, IndexError):
-        return None, None
+from ..utils.path_helpers import construct_data_path, extract_year_week_type_from_path
 
 
 def _read_column_headers(file_path: Path):
@@ -119,7 +84,7 @@ def _process_csv_file(file_path: Path) -> Optional[pd.DataFrame]:
         df = _convert_data_types(df)
 
         # Extract year and week from file path and add columns if they don't exist
-        year, week = _extract_year_week_from_path(file_path)
+        year, week, _ = extract_year_week_type_from_path(str(file_path))
         if year is not None and 'year' not in df.columns:
             df['year'] = year
         if week is not None and 'week' not in df.columns:
@@ -144,8 +109,12 @@ def read_weekly_file(year: int, week: int, file_type: str) -> Optional[pd.DataFr
     Returns:
         pandas.DataFrame: The CSV data if successful, None if file not found or error
     """
+    # Use helper function to construct path
+    file_path_str = construct_data_path(year, week, file_type)
+    
+    # Convert to absolute path relative to project root
     base_path = Path(__file__).parent.parent.parent  # Go up to project root
-    file_path = base_path / "data" / str(year) / f"week{week}" / f"{file_type}.csv"
+    file_path = base_path / file_path_str
 
     if file_path.exists():
         return _process_csv_file(file_path)
