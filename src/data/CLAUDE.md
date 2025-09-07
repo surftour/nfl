@@ -2,7 +2,7 @@
 
 ## Overview
 
-The `weekly_reader.py` module provides functions to read NFL weekly data from CSV files stored in the project's `data/` directory structure. Files are organized as `data/YYYY/weekXX/filename.csv`.
+The `reader_weekly_offdef.py` module provides functions to read NFL weekly data from CSV files stored in the project's `data/` directory structure. Files are organized as `data/YYYY/weekXX/filename.csv`.
 
 ## Functions
 
@@ -20,7 +20,7 @@ Reads a specific weekly CSV file from the data directory structure.
 
 **Example:**
 ```python
-from src.data.weekly_reader import read_weekly_file
+from src.data.reader_weekly_offdef import read_weekly_file
 
 # Read defensive stats for week 15 of 2020 season
 def_data = read_weekly_file(2020, 15, 'def')
@@ -39,7 +39,7 @@ Reads all weekly files of a specific type for a given year and combines them int
 
 **Example:**
 ```python
-from src.data.weekly_reader import read_all_weeks
+from src.data.reader_weekly_offdef import read_all_weeks
 
 # Read all defensive stats for 2020 season
 all_def_data = read_all_weeks(2020, 'def')
@@ -57,7 +57,7 @@ Lists all available weeks for a given year.
 
 **Example:**
 ```python
-from src.data.weekly_reader import list_available_weeks
+from src.data.reader_weekly_offdef import list_available_weeks
 
 # Get list of available weeks for 2020
 weeks = list_available_weeks(2020)
@@ -77,7 +77,7 @@ Lists all available file types for a specific year and week.
 
 **Example:**
 ```python
-from src.data.weekly_reader import list_available_file_types
+from src.data.reader_weekly_offdef import list_available_file_types
 
 # Get available file types for week 15 of 2020
 file_types = list_available_file_types(2020, 15)
@@ -108,9 +108,11 @@ data/
 ## Usage Examples
 
 ```python
-from src.data.weekly_reader import (
+from src.data.reader_weekly_offdef import (
     read_weekly_file, 
-    read_all_weeks, 
+    read_all_weeks
+)
+from src.data.weekly_info import (
     list_available_weeks,
     list_available_file_types
 )

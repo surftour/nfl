@@ -8,6 +8,6 @@ pylint src/
 # echo "Running pylint on specific modules..."
 # pylint src/api/espn.py
 # pylint src/utils/data_io.py
-# pylint src/data/weekly_reader.py
+# pylint src/data/reader_weekly_offdef.py
 
 echo "Pylint checks completed."

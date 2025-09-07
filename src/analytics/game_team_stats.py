@@ -1,6 +1,6 @@
 import pandas as pd
-from ..data.weekly_results_reader import read_results
-from ..data.weekly_reader import read_weekly_file
+from ..data.reader_weekly_results import read_results
+from ..data.reader_weekly_offdef import read_weekly_file
 
 
 def combine_game_results_with_team_stats(year, week, results_file_path=None):

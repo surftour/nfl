@@ -38,13 +38,13 @@ The pylint configuration (`.pylintrc`) is customized for practical Python develo
 - `fetch_team_stats(year, team_id)` - Fetches team statistics
 - `fetch_game_results(year, week, season_type)` - Fetches game results
 
-### Weekly Data Reader (`src/data/weekly_reader.py`)
+### Weekly Data Reader (`src/data/reader_weekly_offdef.py`)
 - `read_weekly_file(year, week, file_type)` - Reads specific weekly CSV files
 - `read_all_weeks(year, file_type)` - Combines all weekly files for a year
 - Automatically handles column name concatenation and data type inference
 - Separates league totals/averages from team data
 
-### Weekly Results Reader (`src/data/weekly_results_reader.py`)
+### Weekly Results Reader (`src/data/reader_weekly_results.py`)
 - `read_weekly_game_results(file_path)` - Reads TSV files containing weekly game results
 - Returns DataFrame with columns: date, visiting_team, visiting_score, home_team, home_score, status
 - Parses game data where each row represents a single NFL game
@@ -56,8 +56,8 @@ The pylint configuration (`.pylintrc`) is customized for practical Python develo
 
 ```python
 from src.api.espn import fetch_teams, fetch_team_stats
-from src.data.weekly_reader import read_weekly_file, read_all_weeks
-from src.data.weekly_results_reader import read_weekly_game_results
+from src.data.reader_weekly_offdef import read_weekly_file, read_all_weeks
+from src.data.reader_weekly_results import read_weekly_game_results
 from src.utils.data_io import save_to_csv
 
 # Fetch and save team data
