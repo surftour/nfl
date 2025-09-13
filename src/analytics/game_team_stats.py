@@ -93,7 +93,10 @@ def combine_game_results_with_team_stats(year, week, results_file_path=None):
     result_df = result_df.drop(columns=['Tm'])
     
     # Reorder columns for better readability
-    base_cols = ['date', 'result_visiting_team', 'result_visiting_score', 'result_home_team', 'result_home_score', 'result_status']
+    base_cols = ['date', 'result_visiting_team', 'result_visiting_score', 'result_visiting_win',
+                 'result_home_team', 'result_home_score', 'result_home_win',
+                 'result_total_points', 'result_point_differential',
+                'result_status']
     meta_cols = ['year', 'week'] if 'year' in result_df.columns else []
     visiting_cols = [col for col in result_df.columns if col.startswith('visiting_')]
     home_cols = [col for col in result_df.columns if col.startswith('home_')]

@@ -97,7 +97,7 @@ def _process_csv_file(file_path: Path) -> Optional[pd.DataFrame]:
         return None
 
 
-def read_weekly_file(year: int, week: int, file_type: str) -> Optional[pd.DataFrame]:
+def read_weekly_file(year: int, week: int, file_type: str, normalize: bool = True) -> Optional[pd.DataFrame]:
     """
     Read a weekly CSV file from the data directory structure.
 
@@ -105,6 +105,7 @@ def read_weekly_file(year: int, week: int, file_type: str) -> Optional[pd.DataFr
         year (int): The year (e.g., 2020)
         week (int): The week number (e.g., 15)
         file_type (str): The file type/name (e.g., 'def', 'off', 'kicking')
+        normalize (bool): Whether to normalize stats by games played (default: True)
 
     Returns:
         pandas.DataFrame: The CSV data if successful, None if file not found or error
@@ -117,10 +118,61 @@ def read_weekly_file(year: int, week: int, file_type: str) -> Optional[pd.DataFr
     file_path = base_path / file_path_str
 
     if file_path.exists():
-        return _process_csv_file(file_path)
+        df = _process_csv_file(file_path)
+        
+        if df is not None and normalize:
+            # Define columns to normalize
+            columns_to_normalize = [
+                "PF", "Yds", "TotYdsPlusTOPly", "TotYdsPlusTOTO", "FL", "1stD",
+                "PassingCmp", "PassingAtt", "PassingYds", "PassingTD", "PassingInt", "Passing1stD",
+                "RushingAtt", "RushingYds", "RushingTD", "Rushing1stD",
+                "PenaltiesPen", "PenaltiesYds", "Penalties1stPy"
+            ]
+            
+            # Only normalize columns that exist in the DataFrame
+            existing_columns = [col for col in columns_to_normalize if col in df.columns]
+            
+            if existing_columns:
+                df = normalize_stats_by_game(df, existing_columns)
+        
+        return df
 
     print(f"File not found: {file_path}")
     return None
+
+
+def normalize_stats_by_game(df: pd.DataFrame, column_names: List[str], games_column: str = 'G', suffix: str = 'PerGame') -> pd.DataFrame:
+    """
+    Generic helper function to create per-game average columns for multiple stats.
+    Replaces the original columns with their per-game normalized versions.
+    
+    Parameters:
+        df (pd.DataFrame): Input DataFrame
+        column_names (List[str]): List of column names to divide by games
+        games_column (str): Name of the games column (default: 'G')
+        suffix (str): Suffix to add to the new column names (default: 'PerGame')
+    
+    Returns:
+        pd.DataFrame: DataFrame with original columns replaced by per-game columns
+    """
+    if games_column not in df.columns:
+        raise ValueError(f"Games column '{games_column}' not found in DataFrame")
+    
+    # Check that all column names exist
+    missing_columns = [col for col in column_names if col not in df.columns]
+    if missing_columns:
+        raise ValueError(f"Columns not found in DataFrame: {missing_columns}")
+    
+    # Create a copy to avoid modifying the original DataFrame
+    result_df = df.copy()
+    
+    # Calculate per-game averages for all specified columns and drop originals
+    for column_name in column_names:
+        new_column_name = f"{column_name}{suffix}"
+        result_df[new_column_name] = result_df[column_name] / result_df[games_column].replace(0, pd.NA)
+        result_df = result_df.drop(columns=[column_name])
+    
+    return result_df
 
 
 def read_all_weeks(year: int, file_type: str) -> Optional[pd.DataFrame]:

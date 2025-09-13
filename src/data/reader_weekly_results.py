@@ -55,7 +55,19 @@ def read_results_path(file_path):
         
         i += 1
     
-    return pd.DataFrame(games)
+    df = pd.DataFrame(games)
+    
+    # Create target variables from game results
+    if not df.empty:
+        # Binary win indicators
+        df['result_visiting_win'] = (df['result_visiting_score'] > df['result_home_score']).astype(int)
+        df['result_home_win'] = (df['result_home_score'] > df['result_visiting_score']).astype(int)
+        
+        # Point totals and differentials
+        df['result_total_points'] = df['result_visiting_score'] + df['result_home_score']
+        df['result_point_differential'] = df['result_home_score'] - df['result_visiting_score']
+    
+    return df
 
 
 def read_results(year: int, week: int):
