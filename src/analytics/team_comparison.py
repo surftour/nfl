@@ -5,23 +5,14 @@ from ..utils.data_io import save_to_csv
 def create_team_comparison(year, selected_metrics=None):
     """
     Fetch stats for all NFL teams and create a comparison DataFrame
-    
+
     Args:
         year: Season year (e.g., 2024)
-        selected_metrics: List of metric names to include. If None, includes common metrics.
-    
+        selected_metrics: List of metric names to include. If None, includes all available metrics.
+
     Returns:
         DataFrame with one row per team and selected metrics as columns
     """
-    if selected_metrics is None:
-        selected_metrics = [
-            'totalYards',
-            'passingYards',
-            'rushingYards',
-            'totalTouchdowns',
-            'turnovers',
-            'totalPointsPerGame'
-        ]
 
     teams_df = fetch_teams()
     if teams_df is None or teams_df.empty:
@@ -50,13 +41,20 @@ def create_team_comparison(year, selected_metrics=None):
             'abbreviation': team_abbr
         }
 
-        # Extract selected metrics
-        for metric in selected_metrics:
-            matching_stats = stats_df[stats_df['name'] == metric]
-            if not matching_stats.empty:
-                team_row[metric] = matching_stats.iloc[0]['value']
-            else:
-                team_row[metric] = None
+        # Extract metrics
+        if selected_metrics is None:
+            # Grab all available metrics
+            for _, stat in stats_df.iterrows():
+                metric_name = stat['name']
+                team_row[metric_name] = stat['value']
+        else:
+            # Extract only selected metrics
+            for metric in selected_metrics:
+                matching_stats = stats_df[stats_df['name'] == metric]
+                if not matching_stats.empty:
+                    team_row[metric] = matching_stats.iloc[0]['value']
+                else:
+                    team_row[metric] = None
 
         comparison_data.append(team_row)
 
