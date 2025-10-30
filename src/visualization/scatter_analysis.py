@@ -17,7 +17,7 @@ import warnings
 import sys
 from pathlib import Path
 sys.path.append(str(Path(__file__).parent.parent))
-from analytics.game_team_stats import combine_game_results_with_team_stats
+from src.analytics.game_team_stats import combine_game_results_with_team_stats
 
 
 class ScatterAnalyzer:

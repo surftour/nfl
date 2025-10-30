@@ -199,6 +199,10 @@ def fetch_games_details_batch(boxscore_urls, include_metadata=True, include_stat
                 statistics_list.append(stats)
 
     # Combine all metadata and statistics
+    # Filter out empty DataFrames to avoid FutureWarning
+    metadata_list = [df for df in metadata_list if not df.empty]
+    statistics_list = [df for df in statistics_list if not df.empty]
+
     metadata_df = pd.concat(metadata_list, ignore_index=True) if metadata_list else pd.DataFrame()
     statistics_df = pd.concat(statistics_list, ignore_index=True) if statistics_list else pd.DataFrame()
 
